@@ -39,7 +39,10 @@ cgi_worker: $(OBJ_DIR)/cgi_worker.o $(OBJ_DIR)/buffer.o
 	$(CC) $^ -o $@ -lpython2.7 -lssl -lcrypto
 
 check-lint:
-	python2 cpplint.py --linelength=120 --filter=-readability/casting,-legal/copyright,-build/include_subdir include/*.h src/*.c
+	python2 cpplint.py \
+	--verbose=2 --quiet --linelength=120 \
+	--filter=-readability/casting,-legal/copyright,-build/include_subdir \
+	include/*.h src/*.c
 
 $(TEST_DIR)/%.o: $(TEST_DIR)/%.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
