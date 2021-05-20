@@ -61,9 +61,7 @@ static void update(int op, Channel *chan) {
     DArrayPushBack(&loop->pendingChannels, chan);
     pthread_mutex_unlock(&loop->lock);
     uint64_t one = 1;
-    ssize_t nwrite = write(ChannelGetFD(&loop->eventCh), &one, sizeof(one));
-    // if (nwrite != sizeof(one)) {
-    // }
+    write(ChannelGetFD(&loop->eventCh), &one, sizeof(one));
   }
 }
 
@@ -123,9 +121,7 @@ static void evtfdHandleRead(void *chan) {
   Channel *evtch = (Channel *)chan;
   EventLoop *loop = container_of(chan, EventLoop, eventCh);
   uint64_t one;
-  ssize_t nread = read(evtch->fd, &one, sizeof(one));
-  // if (nread != sizeof(nread) || one != 1) {
-  // }
+  read(evtch->fd, &one, sizeof(one));
   DArray arr;
   DArrayInit(&arr, 20);
   pthread_mutex_lock(&loop->lock);

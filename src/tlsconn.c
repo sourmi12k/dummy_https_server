@@ -34,7 +34,7 @@ void TLSInit() {
 
 Channel *TLSGetChannel(void *conn) {
   TLSConn *tlsconn = (TLSConn *)conn;
-  return tlsconn->channel;
+  return &tlsconn->channel;
 }
 void TLSSend(void *conn, const char *data, int size) {
   TLSConn *tlsconn = (TLSConn *)conn;

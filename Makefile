@@ -26,15 +26,6 @@ all : liso_server log_test cgi_worker
 liso_server: $(OBJ)
 	$(CC) $^ -o $@ -lpthread  -lssl -lcrypto
 
-# parse_test: $(OBJ_DIR)/buffer.o $(OBJ_DIR)/cgi.o \
-#             $(OBJ_DIR)/eventloop.o $(OBJ_DIR)/log.o \
-# 						$(OBJ_DIR)/parse.o $(OBJ_DIR)/utils.o \
-# 						$(TEST_DIR)/parse_test.o
-# 	$(CC) $^ -o $@ -lpthread -lssl -lcrypto
-
-log_test: $(OBJ_DIR)/log.o $(OBJ_DIR)/utils.o $(TEST_DIR)/log_test.o
-	$(CC) $^ -o $@ -lpthread
-
 cgi_worker: $(OBJ_DIR)/cgi_worker.o $(OBJ_DIR)/buffer.o
 	$(CC) $^ -o $@ -lpython2.7 -lssl -lcrypto
 
@@ -44,8 +35,8 @@ check-lint:
 	--filter=-readability/casting,-legal/copyright,-build/include_subdir \
 	include/*.h src/*.c
 
-$(TEST_DIR)/%.o: $(TEST_DIR)/%.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
+check-clang-tidy: $(OBJ)
+	python2 run_clang_tidy.py -clang-tidy-binary /usr/bin/clang-tidy-8 -p $(OBJ_DIR)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(OBJ_DIR)
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@

@@ -29,7 +29,7 @@ void TCPConnSend(void *conn, const char *data, int size) {
     }
   }
 }
-static void doCloseTCPConn(TCPConn *tcpconn) {
+static void doCloseTCPConn(TCPConn *conn) {
   ChannelFree(&conn->channel);
   BufferFree(&conn->input_buffer);
   BufferFree(&conn->output_buffer);
