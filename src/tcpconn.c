@@ -29,14 +29,21 @@ void TCPConnSend(void *conn, const char *data, int size) {
     }
   }
 }
-// 关闭连接
-void TCPConnClose(void *tcpconn) {
-  TCPConn *conn = (TCPConn *)tcpconn;
+static void doCloseTCPConn(TCPConn *tcpconn) {
   ChannelFree(&conn->channel);
   BufferFree(&conn->input_buffer);
   BufferFree(&conn->output_buffer);
   HTTPClientFree(conn->http_client);
   free(conn);
+}
+// 关闭连接
+void TCPConnClose(void *tcpconn) {
+  TCPConn *conn = (TCPConn *)tcpconn;
+  if (ChannelWritingEnabled(&conn->channel)) {
+    conn->closed = 1;
+  } else {
+    doCloseTCPConn(tcpconn);
+  }
 }
 // 当Channel可读时调用的函数
 void TCPConnHandleRead(void *chan) {
@@ -63,11 +70,6 @@ void TCPConnHandleRead(void *chan) {
 // 当Channel 可写时调用的函数
 void TCPConnHandleWrite(void *chan) {
   Channel *ch = (Channel *)chan;
-  // assert();
-  if (pthread_self() != ((EventLoop *)(ch->loop))->tid) {
-    printf("fd: %d, loop: %d\n", ch->fd, ((EventLoop *)(ch->loop))->epfd);
-    assert(0);
-  }
   assert(ChannelWritingEnabled(ch));
   TCPConn *conn = container_of(ch, TCPConn, channel);
   int err;
@@ -76,6 +78,9 @@ void TCPConnHandleWrite(void *chan) {
     case ALLWRITTEN:
       LogDebug("all written, fd: %d\n", ch->fd);
       ChannelDisableWriting(ch);
+      if (conn->closed) {
+        doCloseTCPConn(conn);
+      }
       break;
     case PARTIALWRITTEN:
       break;
@@ -91,6 +96,7 @@ void TCPConnHandleWrite(void *chan) {
 void TCPConnHandleNewConn(EventLoop *loop, int connfd) {
   TCPConn *conn = (TCPConn *)malloc(sizeof(TCPConn));
   ChannelInit(&conn->channel, connfd, loop, TCPConnHandleRead, TCPConnHandleWrite);
+  conn->closed = 0;
   BufferInit(&conn->input_buffer);
   BufferInit(&conn->output_buffer);
   conn->http_client = HTTPClientNew(conn, TCPConnSend, TCPConnGetChannel, TCPConnClose);

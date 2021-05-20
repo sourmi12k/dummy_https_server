@@ -11,6 +11,7 @@ typedef struct {
   Buffer input_buffer;
   Buffer output_buffer;
   HTTPClient *http_client;
+  int closed;
 } TCPConn;
 Channel *TCPConnGetChannel(void *conn);
 void TCPConnSend(void *conn, const char *data, int size);
