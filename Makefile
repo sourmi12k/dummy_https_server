@@ -1,6 +1,6 @@
-SRC_DIR := src
-OBJ_DIR := obj
-TEST_DIR := test
+SRC_DIR := ${CURDIR}/src
+OBJ_DIR := ${CURDIR}/obj
+COMPILE_COMMANDS := $(OBJ_DIR)/compile_commands.json
 # all src files
 SRC := $(wildcard $(SRC_DIR)/*.c)
 BASIC_OBJ := $(OBJ_DIR)/acceptor.o $(OBJ_DIR)/buffer.o \
@@ -11,17 +11,22 @@ BASIC_OBJ := $(OBJ_DIR)/acceptor.o $(OBJ_DIR)/buffer.o \
 # all objects
 OBJ := $(BASIC_OBJ) $(OBJ_DIR)/parse.o
 # all binaries
-BIN := liso_server parse_test log_test cgi_worker
+BIN := liso_server cgi_worker
 # C compiler
-CC  := gcc -fsanitize=address -fsanitize=undefined -fno-sanitize-recover=all -static-libasan
+CC  := gcc -fsanitize=address -fsanitize=undefined -fno-sanitize-recover=all
 # C PreProcessor Flag
-CPPFLAGS := -Iinclude
+CPPFLAGS := -I${CURDIR}/include
 # compiler flags
 CFLAGS   := -g -Wall -Werror
 # DEPS = http.h y.tab.h
 
 default: all
-all : liso_server log_test cgi_worker
+all : liso_server cgi_worker init_file
+check-code : check-lint check-clang-tidy
+
+init_file: $(OBJ_DIR)
+	$(RM) $(COMPILE_COMMANDS)
+	@echo "[" > $(COMPILE_COMMANDS)
 
 liso_server: $(OBJ)
 	$(CC) $^ -o $@ -lpthread  -lssl -lcrypto
@@ -35,15 +40,18 @@ check-lint:
 	--filter=-readability/casting,-legal/copyright,-build/include_subdir \
 	include/*.h src/*.c
 
-check-clang-tidy: $(OBJ)
-	python2 run_clang_tidy.py -clang-tidy-binary /usr/bin/clang-tidy-8 -p $(OBJ_DIR)
+check-clang-tidy: init_file $(OBJ)
+	sed -i '$$s/.$$//' $(COMPILE_COMMANDS)
+	@echo ']' >> $(COMPILE_COMMANDS)
+	@python2 run_clang_tidy.py -clang-tidy-binary /usr/bin/clang-tidy-8 -p $(OBJ_DIR)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(OBJ_DIR)
+	@echo '{\n  "directory": "$(OBJ_DIR)",\n  "command": "$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@",\n  "file": "$<"\n},' >> $(COMPILE_COMMANDS)
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
 
 $(OBJ_DIR):
 	mkdir $@
 
 clean:
-	$(RM) $(OBJ) $(BIN) $(TEST_DIR)/*.o
+	$(RM) $(OBJ) $(BIN)
 	$(RM) -r $(OBJ_DIR)
