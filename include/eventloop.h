@@ -1,5 +1,5 @@
-#ifndef LS_EVENTLOOP_H
-#define LS_EVENTLOOP_H
+#ifndef INCLUDE_EVENTLOOP_H_
+#define INCLUDE_EVENTLOOP_H_
 #include <pthread.h>
 #include <stdint.h>
 
@@ -39,4 +39,4 @@ void LoopSetThread(EventLoop *loop, pthread_t tid);
 void Loop(EventLoop *loop);
 void QuitLoop(EventLoop *loop);
 
-#endif
+#endif  // INCLUDE_EVENTLOOP_H_

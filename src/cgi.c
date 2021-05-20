@@ -143,9 +143,9 @@ static void processRequest(HTTPClient *client) {
   // nread == 0 means child exit
   // nread < 0 means pipe is empty
   while ((nread = read(pipe_in, buf, BUFFER_SIZE)) > 0) {
-    for (int i = 0; i < nread; ++i) {
-      printf("%c", buf[i]);
-    }
+    // for (int i = 0; i < nread; ++i) {
+    //   printf("%c", buf[i]);
+    // }
     HTTPClientSend(client, buf, nread);
   }
   HTTPSendComplete(client);

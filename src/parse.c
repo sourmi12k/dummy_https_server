@@ -1,11 +1,10 @@
-#include "http.h"
-
 #include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include "http.h"
 #include "log.h"
 
 static char www_dir[] = "www";
@@ -91,7 +90,7 @@ static int parseRequestLine(RequestLine *line, const char *data, int size) {
 }
 
 static int parseRequestHeader(HeaderList *list, const char *data, int size) {
-  // TODO:
+  // TODO(sourmi12k):
   //      1. find character ':'
   //      2. string before ':' is header name and string after is header value
   assert(size >= 2 && data[size - 1] == '\n' && data[size - 2] == '\r');
@@ -285,9 +284,8 @@ static void response505(HTTPClient *client) {
   client->close_conn(client->conn);
 }
 static int processRequest(HTTPClient *client) {
-  char file_path[4096];
-  strcpy(file_path, www_dir);
-  strcat(file_path, client->request.request_line.httpUri);
+  char file_path[4296];
+  snprintf(file_path, sizeof(file_path), "%s%s", www_dir, client->request.request_line.httpUri);
   if (strstr(file_path, "../") != NULL || strstr(file_path, "./") != NULL) {
     response400(client);
     client->close_conn(client->conn);
@@ -304,10 +302,10 @@ static int processRequest(HTTPClient *client) {
       struct stat file_stat;
       stat(file_path, &file_stat);
       ssize_t content_length = file_stat.st_size;
-      snprintf(response_head + strlen(response_head), 200, "%ld\r\n\r\n", content_length);
+      snprintf(response_head + strlen(response_head), sizeof(response_head), "%ld\r\n\r\n", content_length);
       int head_len = strlen(response_head);
       char *response = (char *)malloc(content_length + head_len);
-      strcpy(response, response_head);
+      snprintf(response, content_length + head_len, "%s", response_head);
       ssize_t nread = read(fd, response + head_len, content_length);
       close(fd);
       if (nread == content_length) {

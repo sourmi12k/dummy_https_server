@@ -9,9 +9,9 @@
 #include <unistd.h>
 #include "log.h"
 
-const static int noneEvent = 0;
-const static int readEvent = EPOLLIN | EPOLLPRI;
-const static int writeEvent = EPOLLOUT;
+static const int noneEvent = 0;
+static const int readEvent = EPOLLIN | EPOLLPRI;
+static const int writeEvent = EPOLLOUT;
 
 void ChannelInit(Channel *channel, int fd, EventLoop *eventloop, void (*handleRead)(void *),
                  void (*handleWrite)(void *)) {
@@ -29,7 +29,7 @@ int ChannelWritingEnabled(Channel *channel) { return channel->events & writeEven
 int ChannelGetFD(Channel *channel) { return channel->fd; }
 
 void ChannelShutDownWrite(Channel *channel) {
-  // TODO: error handling
+  // TODO(sourmi12k): error handling
   assert(!ChannelWritingEnabled(channel));
   shutdown(channel->fd, SHUT_WR);
 }
@@ -62,8 +62,8 @@ static void update(int op, Channel *chan) {
     pthread_mutex_unlock(&loop->lock);
     uint64_t one = 1;
     ssize_t nwrite = write(ChannelGetFD(&loop->eventCh), &one, sizeof(one));
-    if (nwrite != sizeof(one)) {
-    }
+    // if (nwrite != sizeof(one)) {
+    // }
   }
 }
 
@@ -124,8 +124,8 @@ static void evtfdHandleRead(void *chan) {
   EventLoop *loop = container_of(chan, EventLoop, eventCh);
   uint64_t one;
   ssize_t nread = read(evtch->fd, &one, sizeof(one));
-  if (nread != sizeof(nread) || one != 1) {
-  }
+  // if (nread != sizeof(nread) || one != 1) {
+  // }
   DArray arr;
   DArrayInit(&arr, 20);
   pthread_mutex_lock(&loop->lock);
@@ -139,8 +139,8 @@ static void evtfdHandleRead(void *chan) {
   DArrayFree(&arr);
 }
 
-const static int timeoutms = 200;
-const static int maxfds = 4096;
+static const int timeoutms = 200;
+static const int maxfds = 4096;
 EventLoop *NewLoop() {
   EventLoop *loop = (EventLoop *)malloc(sizeof(EventLoop));
   memset(loop, 0, sizeof(EventLoop));

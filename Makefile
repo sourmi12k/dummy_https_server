@@ -38,6 +38,9 @@ log_test: $(OBJ_DIR)/log.o $(OBJ_DIR)/utils.o $(TEST_DIR)/log_test.o
 cgi_worker: $(OBJ_DIR)/cgi_worker.o $(OBJ_DIR)/buffer.o
 	$(CC) $^ -o $@ -lpython2.7 -lssl -lcrypto
 
+check-lint:
+	python2 cpplint.py --linelength=120 --filter=-readability/casting,-legal/copyright,-build/include_subdir include/*.h src/*.c
+
 $(TEST_DIR)/%.o: $(TEST_DIR)/%.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
 

@@ -1,5 +1,5 @@
-#ifndef LS_THREADPOOL_H
-#define LS_THREADPOOL_H
+#ifndef INCLUDE_THREADPOOL_H_
+#define INCLUDE_THREADPOOL_H_
 #include <pthread.h>
 #include "eventloop.h"
 typedef struct {
@@ -12,4 +12,4 @@ typedef struct {
 void InitThreadPool(ThreadPool *threadpool, int threadnum);
 void StopAndWaitTP(ThreadPool *threadpool);
 EventLoop *NextLoop(ThreadPool *threadpool);
-#endif
+#endif  // INCLUDE_THREADPOOL_H_

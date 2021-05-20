@@ -1,5 +1,5 @@
-#ifndef LS_ACCEPTOR_H
-#define LS_ACCEPTOR_H
+#ifndef INCLUDE_ACCEPTOR_H_
+#define INCLUDE_ACCEPTOR_H_
 #include "buffer.h"
 #include "eventloop.h"
 #include "threadpool.h"
@@ -23,4 +23,4 @@ typedef struct {
  */
 void AcceptorInit(Acceptor *acceptor, EventLoop *loop, ThreadPool *pool, int port,
                   void (*handleNewConn)(EventLoop *, int));
-#endif
+#endif  // INCLUDE_ACCEPTOR_H_

@@ -61,19 +61,19 @@ int LogInit(const char *filename) {
 void LogDebug(const char *fmt, ...) {
   char *log_str = (char *)malloc(MAX_LOG_LENGTH);
   memset(log_str, 0, MAX_LOG_LENGTH);
-  strcpy(log_str, "[Debug] ");
+  snprintf(log_str, MAX_LOG_LENGTH, "%s", "[Debug] ");
   LOG_WRITE(log_str);
 }
 void LogFatal(const char *fmt, ...) {
   char *log_str = (char *)malloc(MAX_LOG_LENGTH);
   memset(log_str, 0, MAX_LOG_LENGTH);
-  strcpy(log_str, "[Fatal] ");
+  snprintf(log_str, MAX_LOG_LENGTH, "%s", "[Fatal] ");
   LOG_WRITE(log_str);
 }
 void LogError(const char *fmt, ...) {
   char *log_str = (char *)malloc(MAX_LOG_LENGTH);
   memset(log_str, 0, MAX_LOG_LENGTH);
-  strcpy(log_str, "[Error] ");
+  snprintf(log_str, MAX_LOG_LENGTH, "%s", "[Error] ");
   LOG_WRITE(log_str);
 }
 

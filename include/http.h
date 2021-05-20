@@ -1,5 +1,5 @@
-#ifndef LS_HTTP_H
-#define LS_HTTP_H
+#ifndef INCLUDE_HTTP_H_
+#define INCLUDE_HTTP_H_
 #include <assert.h>
 #include "buffer.h"
 #include "eventloop.h"
@@ -85,4 +85,4 @@ void HTTPSendComplete(HTTPClient *client);
 void CGIInit(int queue_size);
 void CGIPush(HTTPClient *client);
 void CGIStopAndWait();
-#endif
+#endif  // INCLUDE_HTTP_H_

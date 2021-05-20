@@ -1,5 +1,5 @@
-#ifndef LS_TLS_H
-#define LS_TLS_H
+#ifndef INCLUDE_TLSCONN_H_
+#define INCLUDE_TLSCONN_H_
 #include <openssl/ssl.h>
 #include "buffer.h"
 #include "eventloop.h"
@@ -21,4 +21,4 @@ void TLSConnClose(void *conn);
 void TLSHandleRead(void *chan);
 void TLSHandleWrite(void *chan);
 void TLSHandleNewConn(EventLoop *loop, int connfd);
-#endif
+#endif  // INCLUDE_TLSCONN_H_

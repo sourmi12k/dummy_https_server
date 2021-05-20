@@ -3,7 +3,10 @@
 #include <string.h>
 #include "log.h"
 // 返回该连接中的Channel,HTTP解析层使用
-Channel *TCPConnGetChannel(void *conn) { return &((TCPConn *)conn)->channel; }
+Channel *TCPConnGetChannel(void *conn) {
+  TCPConn *tcpconn = (TCPConn *)conn;
+  return &tcpconn->channel;
+}
 // 发送数据
 void TCPConnSend(void *conn, const char *data, int size) {
   TCPConn *tcpconn = (TCPConn *)conn;

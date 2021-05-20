@@ -130,7 +130,7 @@ int main() {
             state = Method;
           } else {
             memset(header_name, 0, 4096);
-            strcpy(header_name, data);
+            snprintf(header_name, sizeof(header_name), "%s", data);
             ++state;
           }
         } break;

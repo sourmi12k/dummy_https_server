@@ -32,7 +32,10 @@ void TLSInit() {
   ssl_context = createContext();
 }
 
-Channel *TLSGetChannel(void *conn) { return &((TLSConn *)conn)->channel; }
+Channel *TLSGetChannel(void *conn) {
+  TLSConn *tlsconn = (TLSConn *)conn;
+  return tlsconn->channel;
+}
 void TLSSend(void *conn, const char *data, int size) {
   TLSConn *tlsconn = (TLSConn *)conn;
   BufferAppend(&tlsconn->output_buffer, data, size);

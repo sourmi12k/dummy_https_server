@@ -1,5 +1,5 @@
-#ifndef LS_LOG_H
-#define LS_LOG_H
+#ifndef INCLUDE_LOG_H_
+#define INCLUDE_LOG_H_
 void LogDebug(const char *fmt, ...);
 void LogError(const char *fmt, ...);
 void LogFatal(const char *fmt, ...);
@@ -8,4 +8,4 @@ void LogFatal(const char *fmt, ...);
 int LogInit(const char *file);
 void LogStopAndWait();
 
-#endif
+#endif  // INCLUDE_LOG_H_

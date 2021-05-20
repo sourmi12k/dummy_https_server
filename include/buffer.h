@@ -1,5 +1,5 @@
-#ifndef LS_BUFFER_H
-#define LS_BUFFER_H
+#ifndef INCLUDE_BUFFER_H_
+#define INCLUDE_BUFFER_H_
 #include <openssl/ssl.h>
 
 typedef struct {
@@ -25,4 +25,4 @@ int BufferFindString(Buffer *buffer);
 #define ERROR -1
 int BufferWriteToFD(Buffer *buffer, int fd, int *err);
 int BufferWriteToSSL(Buffer *buffer, SSL *client_context, int *err);
-#endif
+#endif  // INCLUDE_BUFFER_H_

@@ -1,5 +1,5 @@
-#ifndef LS_UTILS_H
-#define LS_UTILS_H
+#ifndef INCLUDE_UTILS_H_
+#define INCLUDE_UTILS_H_
 
 #include <pthread.h>
 #include <stddef.h>
@@ -40,4 +40,4 @@ void BlockQueueInit(BlockQueue *queue, int size);
 void BlockQueuePushBack(BlockQueue *queue, void *value);
 void BlockQueueWaitAndSwap(BlockQueue *queue, DArray *array);
 void BlockQueueFree(BlockQueue *queue);
-#endif
+#endif  // INCLUDE_UTILS_H_

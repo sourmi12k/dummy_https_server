@@ -1,5 +1,5 @@
-#ifndef LS_TCPCONN_H
-#define LS_TCPCONN_H
+#ifndef INCLUDE_TCPCONN_H_
+#define INCLUDE_TCPCONN_H_
 
 #include "buffer.h"
 #include "eventloop.h"
@@ -18,4 +18,4 @@ void TCPConnClose(void *conn);
 void TCPConnHandleRead(void *chan);
 void TCPConnHandleWrite(void *chan);
 void TCPConnHandleNewConn(EventLoop *loop, int connfd);
-#endif
+#endif  // INCLUDE_TCPCONN_H_
