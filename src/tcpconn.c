@@ -79,7 +79,8 @@ void TCPConnHandleWrite(void *chan) {
       LogDebug("all written, fd: %d\n", ch->fd);
       ChannelDisableWriting(ch);
       if (conn->closed) {
-        doCloseTCPConn(conn);
+        // doCloseTCPConn(conn);
+        ChannelShutDownWrite(ch);
       }
       break;
     case PARTIALWRITTEN:

@@ -126,7 +126,8 @@ void TLSHandleWrite(void *chan) {
     case ALLWRITTEN:
       ChannelDisableWriting(ch);
       if (conn->state == TLS_CLOSED) {
-        doCloseTLSConn(conn, 1);
+        // doCloseTLSConn(conn, 1);
+        ChannelShutDownWrite(ch);
       }
       break;
     case PARTIALWRITTEN:
